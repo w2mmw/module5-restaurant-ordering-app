@@ -1,0 +1,72 @@
+body {
+    margin: 0;
+    background: #000;
+    font-family: 'Smythe', cursive;
+} 
+header{
+    margin: 0 auto;
+    width: 600px;
+    padding: 0 6px 0 0;
+}
+img{
+    width:600px;
+}
+p{
+    margin: 0;
+}
+main{
+    margin: 0 auto;
+    width: 600px;
+    padding: 0;
+    background: #fff;
+}
+.container{
+    margin: 0 auto;
+    width: 508px;
+}
+.menuItem{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 32px;
+    padding-bottom: 32px;
+    border-bottom: solid 1px #d2d2d2;
+}
+#menuImage{
+    height: 89px;
+    width: 70px;
+    text-align: center;
+}
+#menuDescription{
+    width: 377px;
+}
+#itemImage{
+    font-size: 60px;
+    text-align: center;
+}
+#itemDescription{
+    font-size: 28px;
+    color: #000;
+}
+#itemItems{
+    font-size: 16px;
+    color: #8b8b8b;
+}
+#itemCost{
+    font-size: 20px;
+    color: #000;
+}
+#itemButton{
+    font-family: Inter;
+    font-weight: 200;
+    font-size: 32px;
+    color: #3c3c3c;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    border: solid 1.5px #dedede;
+    text-align: center;
+    background: #fff;
+    padding: 0;
+    padding-bottom: 3px;
+}
