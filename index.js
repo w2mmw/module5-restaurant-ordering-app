@@ -1,32 +1,59 @@
 import {menuArray} from './data.js';
+import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
+let ordersArray = []; // items that the user is ordering.
+let grandTotal = 0; // total price of the order.
+
 
 document.addEventListener('click', function(e){
     if(e.target.dataset.id){
-        //alert (e.target.dataset.id)
         handleItemOrderClick(e.target.dataset.id) 
+    }
+    else if(e.target.dataset.ordernum){
+        handleRemoveClick(e.target.dataset.ordernum)
+    }
+    else if(e.target.id === 'tweet-btn'){
+        //handleTweetBtnClick()
     }
     
 })
+// This is what happens when the order (+) button is clicked on an item.
 function handleItemOrderClick(orderId){ 
+    // find the item in the menuArray.
     const targetOrderObj = menuArray.filter(function(tweet){
         
         return tweet.id == orderId
     })[0]
-    alert(targetOrderObj.name+ targetOrderObj.ingredients+ targetOrderObj.price);
-    //if (targetTweetObj.isLiked){
-    //    targetTweetObj.likes--
-    //}
-    //else{
-    //    targetTweetObj.likes++ 
-    //}
-    //targetTweetObj.isLiked = !targetTweetObj.isLiked
-    //render()
+    //push menu item into the ordersArray.
+    ordersArray.push({
+        name: targetOrderObj.name,
+        price: targetOrderObj.price,
+        uuId: uuidv4()
+    })
+    render()
+}
+//This is what happens when a remove button is pressed on an ordered item.
+function handleRemoveClick(orderNum){
+    const targetOrderObj = ordersArray.filter(function(tweet){
+        return tweet.uuId != orderNum
+    })
+    ordersArray.length = 0;
+    console.log( targetOrderObj);
+    targetOrderObj.forEach(function(tweet){
+        alert(tweet.name);
+        ordersArray.push({
+            name: tweet.name,
+            price: tweet.price,
+            uuId: tweet.uuId
+        })
+    })
+    render();
 }
 
 // get all the necessary data to display the HTML
 function getFeedHtml(){
         let feedHtml = ``
         
+        // Display the menu items.
         menuArray.forEach(function(tweet){
             feedHtml +=`<div class = "menuItem">
             <div id="menuImage">
@@ -48,6 +75,36 @@ function getFeedHtml(){
             </div>
         </div>`
         })
+
+        //Display items theat have been ordered.
+        if (ordersArray.length > 0 ){
+                feedHtml +=`
+                <div class="theOrder">
+                    <div class="orderHeading">
+                        <p class="p28">Your Order</p>
+                    </div>
+                `
+            ordersArray.forEach(function(ordArr){ 
+                grandTotal += ordArr.price;
+                feedHtml += `
+                    <div class="orderedItem">
+                        <p class="p28">${ordArr.name}</p>
+                        <button id="btnRemove" data-ordernum = "${ordArr.uuId}">Remove</button>
+                        <p class ="p20">$${ordArr.price}</p>
+                    </div>`
+            })
+            feedHtml += `
+                    <div id="emptySpace">.</div>
+                    <div class="orderedTotal">
+                        <p class="p28">Total</p>
+                        <p class="p20">$${grandTotal}</p>
+                    </div>
+                    <div class="orderedSend">
+                        <button class="completeOrder">Complete Order</button>
+                    </div>
+                </div>`
+        }
+        grandTotal = 0;
         return feedHtml;
 }
 
@@ -57,26 +114,7 @@ function render(){
 }
 
 render()
-
-
-//
-//
 /*
-document.addEventListener('click', function(e){
-    if(e.target.dataset.like){
-       handleLikeClick(e.target.dataset.like) 
-    }
-    else if(e.target.dataset.retweet){
-        handleRetweetClick(e.target.dataset.retweet)
-    }
-    else if(e.target.dataset.reply){
-        handleReplyClick(e.target.dataset.reply)
-    }
-    else if(e.target.id === 'tweet-btn'){
-        handleTweetBtnClick()
-    }
-})
- 
 function handleLikeClick(tweetId){ 
     const targetTweetObj = tweetsData.filter(function(tweet){
         return tweet.uuid === tweetId
@@ -165,46 +203,4 @@ function getFeedHtml(){
 </div>
 `
             })
-        }
-        
-          
-        feedHtml += `
-<div class="tweet">
-    <div class="tweet-inner">
-        <img src="${tweet.profilePic}" class="profile-pic">
-        <div>
-            <p class="handle">${tweet.handle}</p>
-            <p class="tweet-text">${tweet.tweetText}</p>
-            <div class="tweet-details">
-                <span class="tweet-detail">
-                    <i class="fa-regular fa-comment-dots"
-                    data-reply="${tweet.uuid}"
-                    ></i>
-                    ${tweet.replies.length}
-                </span>
-                <span class="tweet-detail">
-                    <i class="fa-solid fa-heart ${likeIconClass}"
-                    data-like="${tweet.uuid}"
-                    ></i>
-                    ${tweet.likes}
-                </span>
-                <span class="tweet-detail">
-                    <i class="fa-solid fa-retweet ${retweetIconClass}"
-                    data-retweet="${tweet.uuid}"
-                    ></i>
-                    ${tweet.retweets}
-                </span>
-            </div>   
-        </div>            
-    </div>
-    <div class="hidden" id="replies-${tweet.uuid}">
-        ${repliesHtml}
-    </div>   
-</div>
-`
-   })
-   return feedHtml 
-}
-
-
 */
