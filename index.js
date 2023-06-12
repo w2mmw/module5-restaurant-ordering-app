@@ -11,8 +11,11 @@ document.addEventListener('click', function(e){
     else if(e.target.dataset.ordernum){
         handleRemoveClick(e.target.dataset.ordernum)
     }
-    else if(e.target.id === 'tweet-btn'){
-        //handleTweetBtnClick()
+    else if(e.target.id === 'completeOrder'){
+        handleCCFormClick()
+    }
+    else if(e.target.id === 'btnCancel'){
+        handleBtnCancelClick()
     }
     
 })
@@ -48,8 +51,17 @@ function handleRemoveClick(orderNum){
     })
     render();
 }
-
-// get all the necessary data to display the HTML
+// This is what happens when the Complete Order button is pressed. The credit card
+// <div> is displayed.
+function handleCCFormClick(){
+    document.getElementById ("creditCard").style.display = "flex";
+}
+// This is what happens with the red x box is clicked in the credit card form.
+// It hides the credit card form.
+function handleBtnCancelClick() {
+    document.getElementById("creditCard").style.display = "none";
+}
+    // get all the necessary data to display the HTML
 function getFeedHtml(){
         let feedHtml = ``
         
@@ -100,7 +112,7 @@ function getFeedHtml(){
                         <p class="p20">$${grandTotal}</p>
                     </div>
                     <div class="orderedSend">
-                        <button class="completeOrder">Complete Order</button>
+                        <button id="completeOrder">Complete Order</button>
                     </div>
                 </div>`
         }
