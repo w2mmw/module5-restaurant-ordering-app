@@ -2,6 +2,9 @@ import {menuArray} from './data.js';
 import { v4 as uuidv4 } from 'https://jspm.dev/uuid';
 let ordersArray = []; // items that the user is ordering.
 let grandTotal = 0; // total price of the order.
+let isPaidFor = false; //did the user enter in his/her credit card?
+let ccNameId = document.getElementById("ccName");
+
 
 
 document.addEventListener('click', function(e){
@@ -16,6 +19,9 @@ document.addEventListener('click', function(e){
     }
     else if(e.target.id === 'btnCancel'){
         handleBtnCancelClick()
+    }
+    else if(e.target.id === 'ccPay'){
+        handleCCPayClick()
     }
     
 })
@@ -54,11 +60,31 @@ function handleRemoveClick(orderNum){
 // <div> is displayed.
 function handleCCFormClick(){
     document.getElementById ("creditCard").style.display = "flex";
+    var childNodes = document.getElementById("container").getElementsByTagName('*');
+    for (var node of childNodes) {
+        node.disabled = true;
+    }
 }
 // This is what happens with the red x box is clicked in the credit card form.
 // It hides the credit card form.
 function handleBtnCancelClick() {
     document.getElementById("creditCard").style.display = "none";
+    var childNodes = document.getElementById("container").getElementsByTagName('*');
+    for (var node of childNodes) {
+        node.disabled = false;
+    }
+}
+function handleCCPayClick(){
+    isPaidFor = true;
+    render()
+    var childNodes = document.getElementById("container").getElementsByTagName('*');
+    for (var node of childNodes) {
+       node.disabled = false;
+    }
+    document.getElementById("creditCard").style.display = "none";
+    //isPaidFor = false;
+    //render()
+
 }
     // get all the necessary data to display the HTML
 function getFeedHtml(){
@@ -88,7 +114,7 @@ function getFeedHtml(){
         })
 
         //Display items theat have been ordered.
-        if (ordersArray.length > 0 ){
+        if (ordersArray.length > 0 && !isPaidFor){
                 feedHtml +=`
                 <div class="theOrder">
                     <div class="orderHeading">
@@ -115,13 +141,16 @@ function getFeedHtml(){
                     </div>
                 </div>`
         }
+        if (isPaidFor){
+            feedHtml += "<div class='onItsWay'><p id='pOnItsWay'>Thanks " + ccNameId.value + "!, Your order is on it's way!</p></div>";
+        }
         grandTotal = 0;
         return feedHtml;
 }
 
 // render out all HTML on the page.
 function render(){
-        document.querySelector('.container').innerHTML = getFeedHtml()
+        document.querySelector('#container').innerHTML = getFeedHtml()
 }
 
 render()
